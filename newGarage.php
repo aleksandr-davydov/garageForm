@@ -1,12 +1,13 @@
 <?php
-
-//comment
 // users
-$users = [];
-  $users['Names'] = ['males' => ['John', 'Jim', 'Aleks', 'Barak'],
-                     'females' => ['Marry', 'Helen', 'Kate', 'Ann']];
-  $users['Surnames'] = ['Smith', 'Tramp', 'Adams', 'Black'];
-  $users['Gender'] = ['mr', 'mrs'];
+$users = [
+    'Names' => [
+        'males' => ['John', 'Jim', 'Aleks', 'Barak'],
+        'females' => ['Marry', 'Helen', 'Kate', 'Ann'],
+    ],
+    'Surnames' => ['Smith', 'Tramp', 'Adams', 'Black'],
+    'Gender' => ['mr', 'mrs']
+];
 
 // cars
 $cars = [];
@@ -102,23 +103,30 @@ function cars($cars)
     $mark = array_rand($cars);
     $model = array_rand($cars[$mark]);
     $year = $cars[$mark][$model]['year'];
-    return $mark." ".$model.", production year is ".convertYear($year);
+    return $mark." ".$model.", production year is ".convertYear($year). "<br>";
   }
 
 function input($users, $cars, $garage) {
 
   $count_garage = rand(1, 5);
+  $user["name"] = owner($users);
 
-	echo owner($users).' You have ' . $count_garage . ' garages: '. PHP_EOL;
+	echo $user["name"] . ' You have ' . $count_garage . ' garages: <br>'. PHP_EOL;
 	for ($i=1; $i <= $count_garage ; $i++) {
 		$rand_garage = randGarage($garage);
 		echo PHP_EOL.garageText($rand_garage).PHP_EOL;
         $count_car = rand(1,$rand_garage[2][1]);
-        echo 'In this garage you have next cars: '.PHP_EOL;
-		for ($j=1; $j <= $count_car; $j++){
-	    echo '#'.$j.' car: '.cars($cars).PHP_EOL;
-	}
-	   }
+        echo 'In this garage you have next cars:'.PHP_EOL;
+		$g = [];
+        for ($j=1; $j <= $count_car; $j++){
+	        $car = '#' . $j . ' car: ' . cars($cars);
+	        echo $car . PHP_EOL;
+	        $g[] = $car;
+        }
+    $rand_garage["cars"] = $g;
+    $user["garages"][] = $rand_garage;
+    }
+    return $user;
 }
 
-input($users, $cars, $garage);
+$all = input($users, $cars, $garage);
